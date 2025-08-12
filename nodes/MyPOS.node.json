@@ -1,0 +1,20 @@
+{
+  "node": "n8n-nodes-mypos.MyPOS",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": [
+    "Finance & Accounting"
+  ],
+  "resources": {
+    "credentialDocumentation": [
+      {
+        "url": "https://developers.mypos.com/en/doc/more_apis/v1_0/3-authentication"
+      }
+    ],
+    "primaryDocumentation": [
+      {
+        "url": "https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/"
+      }
+    ]
+  }
+}
