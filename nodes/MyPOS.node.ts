@@ -8,7 +8,7 @@ export class MyPOS implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'MyPOS',
 		name: 'mypos',
-		icon: 'file:mypos.svg',
+		icon: 'file:mypos.png',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
