@@ -1,9 +1,9 @@
 import { ICredentialType, INodeProperties } from 'n8n-workflow';
 
 export class EventHub implements ICredentialType {
-    name = 'eventHub';   // this is the reference used in your node
+    name = 'eventHubApi';
     displayName = 'EventHub API';
-    documentationUrl = 'https://github.com/your-repo/eventhub';
+    documentationUrl = 'http://127.0.0.1:5055/api-docs';
 
     properties: INodeProperties[] = [
         {
