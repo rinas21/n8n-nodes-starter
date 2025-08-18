@@ -7,6 +7,8 @@ import {
 	IHttpRequestOptions,
 	NodeConnectionType,
 } from 'n8n-workflow';
+declare const console: any;
+
 
 export class EventHub implements INodeType {
 	description: INodeTypeDescription = {
@@ -22,6 +24,13 @@ export class EventHub implements INodeType {
 		},
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
+
+		// credentials: [
+		// 	{
+		// 		name: 'eventHubApi',  // matches the name in EventHub.credentials.ts
+		// 		required: true,
+		// 	},
+		// ],
 
 		requestDefaults: {
 			baseURL: 'http://localhost:5055/api',
@@ -322,14 +331,14 @@ export class EventHub implements INodeType {
 				if (resource === 'events') {
 					const additionalFields = this.getNodeParameter('additionalFields', 0) as IDataObject;
 					const queryParams: string[] = [];
-					
+
 					if (additionalFields.date) {
 						queryParams.push(`date=${encodeURIComponent(additionalFields.date as string)}`);
 					}
 					if (additionalFields.location) {
 						queryParams.push(`location=${encodeURIComponent(additionalFields.location as string)}`);
 					}
-					
+
 					if (queryParams.length > 0) {
 						endpoint += `?${queryParams.join('&')}`;
 					}
@@ -344,37 +353,35 @@ export class EventHub implements INodeType {
 
 			case 'create':
 				method = 'POST';
-				// Get fields based on resource
+
 				if (resource === 'events') {
 					const eventFields = this.getNodeParameter('eventFields', 0) as IDataObject;
-					body = {
-						name: eventFields.name,
-						date: eventFields.date,
-						location: eventFields.location,
-						description: eventFields.description,
-					};
+					body = {};
+					if (eventFields.name) body.name = eventFields.name;
+					if (eventFields.date) body.date = eventFields.date;
+					if (eventFields.location) body.location = eventFields.location;
+					if (eventFields.description) body.description = eventFields.description;
 				} else if (resource === 'attendees') {
 					const attendeeFields = this.getNodeParameter('attendeeFields', 0) as IDataObject;
-					body = {
-						name: attendeeFields.name,
-						email: attendeeFields.email,
-						phone: attendeeFields.phone,
-					};
+					body = {};
+					if (attendeeFields.name) body.name = attendeeFields.name;
+					if (attendeeFields.email) body.email = attendeeFields.email;
+					if (attendeeFields.phone) body.phone = attendeeFields.phone;
 				} else if (resource === 'registrations') {
 					const registrationFields = this.getNodeParameter('registrationFields', 0) as IDataObject;
-					body = {
-						event_id: registrationFields.event_id,
-						attendee_id: registrationFields.attendee_id,
-						status: registrationFields.status,
-					};
+					body = {};
+					if (registrationFields.event_id) body.event_id = registrationFields.event_id;
+					if (registrationFields.attendee_id) body.attendee_id = registrationFields.attendee_id;
+					if (registrationFields.status) body.status = registrationFields.status;
 				}
 				break;
+
 
 			case 'update':
 				method = 'PUT';
 				const updateId = this.getNodeParameter('id', 0) as string;
 				endpoint += `/${updateId}`;
-				
+
 				// Get fields based on resource
 				if (resource === 'events') {
 					const eventFields = this.getNodeParameter('eventFields', 0) as IDataObject;
@@ -404,17 +411,26 @@ export class EventHub implements INodeType {
 		}
 
 		// Make the API request
+		// Fetch credentials
+		// const credentials = await this.getCredentials('eventHubApi') as { baseURL: string; apiKey: string };
+		// const baseURL = credentials?.baseURL || 'http://localhost:5055/api';
+		const baseURL = 'http://localhost:5055/api';
+
 		const requestOptions: IHttpRequestOptions = {
 			method: method as any,
 			url: endpoint,
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: { 'Content-Type': 'application/json' },
+			baseURL,
 		};
+
 
 		if (method === 'POST' || method === 'PUT') {
 			requestOptions.body = body;
 		}
+		console.log('Request method:', method);
+		console.log('Request URL:', baseURL + endpoint);
+		console.log('Request body:', body);
+		console.log('Request headers:', requestOptions.headers);
 
 		try {
 			const response = await this.helpers.httpRequest(requestOptions);
