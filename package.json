@@ -1,7 +1,7 @@
 {
-  "name": "n8n-nodes-mypos",
+  "name": "n8n-nodes-eventhub",
   "version": "0.1.0",
-  "description": "MyPOS node for n8n",
+  "description": "EventHub and MyPOS nodes for n8n",
   "keywords": [
     "n8n-community-node-package"
   ],
@@ -33,7 +33,8 @@
     "dist/credentials/MyPOSOAuth2Api.credentials.js"
     ],
     "nodes": [
-    "dist/nodes/MyPOS/MyPOS.node.js"
+    "dist/nodes/MyPOS/MyPOS.node.js",
+    "dist/nodes/EventHub/EventHub.node.js"
     ]
   },
   "devDependencies": {
